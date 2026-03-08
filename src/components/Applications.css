@@ -1,0 +1,312 @@
+/* ─── Layout ─────────────────────────────────────────────── */
+.apps__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-10);
+    align-items: center;
+}
+
+/* ─── Body Panel (Left) ──────────────────────────────────── */
+.apps__body-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.apps__body-container {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    aspect-ratio: 200 / 340;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.apps__figure {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+/* Scan line */
+.apps__scan-line {
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+    opacity: 0.3;
+    animation: scan-sweep 4s ease-in-out infinite;
+    border-radius: 1px;
+    box-shadow: 0 0 12px var(--color-accent-glow), 0 0 30px var(--color-accent-glow);
+    z-index: 2;
+}
+
+@keyframes scan-sweep {
+    0% {
+        top: 5%;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.4;
+    }
+
+    90% {
+        opacity: 0.4;
+    }
+
+    100% {
+        top: 90%;
+        opacity: 0;
+    }
+}
+
+/* Decorative grid behind body */
+.apps__body-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0, 184, 156, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 184, 156, 0.03) 1px, transparent 1px);
+    background-size: 24px 24px;
+    border-radius: var(--radius-2xl);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Zone highlight transitions */
+.apps__zone {
+    opacity: 0;
+    animation: zone-in 0.6s var(--ease-out) forwards;
+}
+
+@keyframes zone-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ─── Content Panel (Right) ──────────────────────────────── */
+.apps__content-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+
+/* Tabs */
+.apps__tabs {
+    display: flex;
+    gap: var(--space-1);
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-1);
+}
+
+.apps__tab {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-out);
+    background: transparent;
+    border: none;
+    white-space: nowrap;
+}
+
+.apps__tab:hover {
+    color: var(--color-text-secondary);
+}
+
+.apps__tab--active {
+    background: var(--color-bg-elevated);
+    color: var(--tab-color);
+    box-shadow: var(--shadow-sm);
+    font-weight: 600;
+}
+
+.apps__tab-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+}
+
+.apps__tab-text {
+    display: inline;
+}
+
+.apps__tab-bar {
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--tab-color);
+}
+
+/* Detail content */
+.apps__detail {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    animation: detail-fade 0.4s var(--ease-out);
+}
+
+@keyframes detail-fade {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.apps__detail-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-5);
+    border-bottom: 1px solid var(--color-divider);
+}
+
+.apps__detail-icon-wrap {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--detail-color) 10%, white);
+    color: var(--detail-color);
+    flex-shrink: 0;
+}
+
+.apps__detail-title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.apps__detail-count {
+    font-size: var(--text-xs);
+    color: var(--detail-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+}
+
+/* Item list */
+.apps__detail-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    list-style: none;
+}
+
+.apps__detail-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-normal);
+    transition: all var(--duration-fast) var(--ease-out);
+    animation: item-slide 0.35s var(--ease-out) both;
+}
+
+.apps__detail-item:hover {
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    transform: translateX(4px);
+}
+
+@keyframes item-slide {
+    from {
+        opacity: 0;
+        transform: translateX(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.apps__detail-check {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--detail-color) 10%, white);
+    color: var(--detail-color);
+    flex-shrink: 0;
+}
+
+/* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .apps__layout {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+    }
+
+    .apps__body-panel {
+        order: 2;
+    }
+
+    .apps__content-panel {
+        order: 1;
+    }
+
+    .apps__body-container {
+        max-width: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .apps__tab-text {
+        font-size: var(--text-xs);
+    }
+
+    .apps__tab {
+        padding: var(--space-2) var(--space-3);
+        gap: var(--space-1);
+    }
+
+    .apps__detail {
+        padding: var(--space-5);
+    }
+
+    .apps__body-container {
+        max-width: 220px;
+    }
+}
