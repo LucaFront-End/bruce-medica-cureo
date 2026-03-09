@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { ctaContent } from '../data/content';
 import { User, Mail, Phone, Building2, Stethoscope, UserCircle, HelpCircle, MapPin, ChevronRight, ChevronLeft, Send, CheckCircle2 } from 'lucide-react';
@@ -32,6 +32,7 @@ const STATES = [
 
 export default function CTA() {
     const ref = useScrollReveal();
+    const sectionRef = useRef(null);
     const [step, setStep] = useState(0);
     const [direction, setDirection] = useState('next');
     const [submitted, setSubmitted] = useState(false);
@@ -59,6 +60,9 @@ export default function CTA() {
         if (!canAdvance()) return;
         if (step === totalSteps - 1) {
             setSubmitted(true);
+            setTimeout(() => {
+                sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
             return;
         }
         setDirection('next');
@@ -82,9 +86,9 @@ export default function CTA() {
         const firstName = form.name.split(' ').find(w => !['Dr.', 'Dra.', 'Lic.', 'Ing.'].includes(w)) || form.name;
         const roleLabel = ROLES.find(r => r.value === form.role)?.label || '';
         return (
-            <section className="cta section" id="contacto" ref={ref}>
+            <section className="cta section" id="contacto" ref={sectionRef}>
                 <div className="container">
-                    <div className="cta__success reveal">
+                    <div className="cta__success cta__success--visible">
                         <div className="cta__success-icon">
                             <CheckCircle2 size={64} strokeWidth={1.5} />
                         </div>

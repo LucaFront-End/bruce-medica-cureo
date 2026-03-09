@@ -356,6 +356,11 @@
     color: var(--color-text-tertiary);
 }
 
+.cta__success--visible {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
 /* ─── Responsive ──────────────────────────────────────────── */
 @media (max-width: 768px) {
     .cta__wizard {
