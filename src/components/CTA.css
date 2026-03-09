@@ -361,6 +361,28 @@
     transform: none !important;
 }
 
+.cta__spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.cta__error {
+    text-align: center;
+    color: #ef4444;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    margin-top: var(--space-4);
+}
+
 /* ─── Responsive ──────────────────────────────────────────── */
 @media (max-width: 768px) {
     .cta__wizard {

@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { ctaContent } from '../data/content';
-import { User, Mail, Phone, Building2, Stethoscope, UserCircle, HelpCircle, MapPin, ChevronRight, ChevronLeft, Send, CheckCircle2 } from 'lucide-react';
+import { submitFormToWix } from '../lib/wixClient';
+import { User, Mail, Phone, Building2, Stethoscope, UserCircle, HelpCircle, MapPin, ChevronRight, ChevronLeft, Send, CheckCircle2, Loader2 } from 'lucide-react';
 import './CTA.css';
 
 const STEPS = [
@@ -36,6 +37,8 @@ export default function CTA() {
     const [step, setStep] = useState(0);
     const [direction, setDirection] = useState('next');
     const [submitted, setSubmitted] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState(null);
     const [form, setForm] = useState({
         name: '', email: '', phone: '', role: '', state: '',
         consentMarketing: false, consentPrivacy: false,
@@ -56,13 +59,24 @@ export default function CTA() {
         }
     };
 
-    const goNext = () => {
+    const goNext = async () => {
         if (!canAdvance()) return;
         if (step === totalSteps - 1) {
-            setSubmitted(true);
-            setTimeout(() => {
-                sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
+            setSubmitting(true);
+            setSubmitError(null);
+            try {
+                const roleLabel = ROLES.find(r => r.value === form.role)?.label || form.role;
+                await submitFormToWix({ ...form, role: roleLabel });
+                setSubmitted(true);
+                setTimeout(() => {
+                    sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+            } catch (err) {
+                console.error('Wix CMS Error:', err);
+                setSubmitError('Hubo un error al enviar. Intentá de nuevo.');
+            } finally {
+                setSubmitting(false);
+            }
             return;
         }
         setDirection('next');
@@ -249,11 +263,16 @@ export default function CTA() {
                         </button>
 
                         <button
-                            className={`btn btn--primary btn--lg cta__nav-next ${!canAdvance() ? 'cta__nav-next--disabled' : ''}`}
+                            className={`btn btn--primary btn--lg cta__nav-next ${!canAdvance() || submitting ? 'cta__nav-next--disabled' : ''}`}
                             onClick={goNext}
-                            disabled={!canAdvance()}
+                            disabled={!canAdvance() || submitting}
                         >
-                            {step === totalSteps - 1 ? (
+                            {submitting ? (
+                                <>
+                                    <Loader2 size={16} strokeWidth={2} className="cta__spinner" />
+                                    Enviando...
+                                </>
+                            ) : step === totalSteps - 1 ? (
                                 <>
                                     <Send size={16} strokeWidth={2} />
                                     Solicitar mi Demo
@@ -266,6 +285,10 @@ export default function CTA() {
                             )}
                         </button>
                     </div>
+
+                    {submitError && (
+                        <p className="cta__error">{submitError}</p>
+                    )}
 
                     {/* Quick contact */}
                     <div className="cta__quick-contact">
