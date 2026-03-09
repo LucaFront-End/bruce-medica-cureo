@@ -1,24 +1,111 @@
 import { useState } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { ctaContent } from '../data/content';
-import { Send, User, Mail, Building2, MessageSquare, Phone } from 'lucide-react';
+import { User, Mail, Phone, Building2, Stethoscope, UserCircle, HelpCircle, MapPin, ChevronRight, ChevronLeft, Send, CheckCircle2 } from 'lucide-react';
 import './CTA.css';
+
+const STEPS = [
+    { id: 'name', question: '¿Cómo te llamas?', subtitle: 'Queremos conocerte mejor' },
+    { id: 'email', question: '¿Cuál es tu correo electrónico?', subtitle: 'Para enviarte la información de la demo' },
+    { id: 'phone', question: '¿Cuál es tu teléfono de contacto?', subtitle: 'Para coordinar la demostración' },
+    { id: 'role', question: '¿Quién eres?', subtitle: 'Selecciona tu perfil profesional' },
+    { id: 'state', question: '¿De qué estado eres?', subtitle: 'Para conectarte con el representante más cercano' },
+    { id: 'consent', question: 'Casi listo', subtitle: 'Solo confirma estos permisos y estás dentro' },
+];
+
+const ROLES = [
+    { value: 'clinica', label: 'Clínica / Hospital', icon: Building2 },
+    { value: 'terapeuta', label: 'Terapeuta', icon: Stethoscope },
+    { value: 'medico', label: 'Médico', icon: UserCircle },
+    { value: 'otro', label: 'Otro', icon: HelpCircle },
+];
+
+const STATES = [
+    'Aguascalientes', 'Baja California', 'Baja California Sur', 'Campeche', 'Chiapas',
+    'Chihuahua', 'Ciudad de México', 'Coahuila', 'Colima', 'Durango',
+    'Estado de México', 'Guanajuato', 'Guerrero', 'Hidalgo', 'Jalisco',
+    'Michoacán', 'Morelos', 'Nayarit', 'Nuevo León', 'Oaxaca',
+    'Puebla', 'Querétaro', 'Quintana Roo', 'San Luis Potosí', 'Sinaloa',
+    'Sonora', 'Tabasco', 'Tamaulipas', 'Tlaxcala', 'Veracruz',
+    'Yucatán', 'Zacatecas',
+];
 
 export default function CTA() {
     const ref = useScrollReveal();
-    const [formState, setFormState] = useState({ name: '', email: '', institution: '', message: '' });
+    const [step, setStep] = useState(0);
+    const [direction, setDirection] = useState('next');
     const [submitted, setSubmitted] = useState(false);
+    const [form, setForm] = useState({
+        name: '', email: '', phone: '', role: '', state: '',
+        consentMarketing: false, consentPrivacy: false,
+    });
 
-    const handleChange = (e) => {
-        setFormState(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    const current = STEPS[step];
+    const totalSteps = STEPS.length;
+
+    const canAdvance = () => {
+        switch (current.id) {
+            case 'name': return form.name.trim().length > 1;
+            case 'email': return /\S+@\S+\.\S+/.test(form.email);
+            case 'phone': return form.phone.trim().length >= 8;
+            case 'role': return form.role !== '';
+            case 'state': return form.state !== '';
+            case 'consent': return form.consentPrivacy;
+            default: return false;
+        }
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // In production, this would POST to an API
-        setSubmitted(true);
-        setTimeout(() => setSubmitted(false), 4000);
+    const goNext = () => {
+        if (!canAdvance()) return;
+        if (step === totalSteps - 1) {
+            setSubmitted(true);
+            return;
+        }
+        setDirection('next');
+        setStep(s => s + 1);
     };
+
+    const goBack = () => {
+        if (step === 0) return;
+        setDirection('prev');
+        setStep(s => s - 1);
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            goNext();
+        }
+    };
+
+    if (submitted) {
+        const firstName = form.name.split(' ').find(w => !['Dr.', 'Dra.', 'Lic.', 'Ing.'].includes(w)) || form.name;
+        const roleLabel = ROLES.find(r => r.value === form.role)?.label || '';
+        return (
+            <section className="cta section" id="contacto" ref={ref}>
+                <div className="container">
+                    <div className="cta__success reveal">
+                        <div className="cta__success-icon">
+                            <CheckCircle2 size={64} strokeWidth={1.5} />
+                        </div>
+                        <h2 className="cta__success-title">
+                            ¡Gracias por tu consulta, <span className="cta__success-name">{firstName}</span>!
+                        </h2>
+                        <p className="cta__success-text">
+                            Tu solicitud de demostración como <strong>{roleLabel}</strong> en <strong>{form.state}</strong> ha sido registrada exitosamente.
+                            Un representante de Bruce Médica se pondrá en contacto contigo a <strong>{form.email}</strong> muy pronto.
+                        </p>
+                        <div className="cta__success-contact">
+                            <p>¿Necesitas atención inmediata?</p>
+                            <a href="https://wa.link/go5v9l" className="btn btn--primary btn--lg" target="_blank" rel="noopener noreferrer">
+                                Escríbenos por WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="cta section" id="contacto" ref={ref}>
@@ -26,143 +113,167 @@ export default function CTA() {
                 <div className="section-header reveal">
                     <span className="tag section-header__tag">
                         <span className="tag__dot" />
-                        Contacto
+                        Solicitar Demo
                     </span>
                     <h2 className="section-header__title">{ctaContent.title}</h2>
-                    <p className="section-header__subtitle">{ctaContent.subtitle}</p>
                 </div>
 
-                <div className="cta__layout reveal reveal-delay-1">
-                    {/* Left: Contact info */}
-                    <div className="cta__info">
-                        <div className="cta__info-card">
-                            <div className="cta__info-card-icon">
-                                <Phone size={20} strokeWidth={1.8} />
-                            </div>
-                            <div>
-                                <h4 className="cta__info-card-title">Teléfonos</h4>
-                                {ctaContent.phones.map((phone, i) => (
-                                    <a key={i} href={`tel:${phone.replace(/\s/g, '')}`} className="cta__info-phone">
-                                        {phone}
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
+                <div className="cta__wizard reveal reveal-delay-1">
+                    {/* Progress bar */}
+                    <div className="cta__progress">
+                        <div className="cta__progress-bar" style={{ width: `${((step + 1) / totalSteps) * 100}%` }} />
+                        <span className="cta__progress-text">{step + 1} / {totalSteps}</span>
+                    </div>
 
-                        <div className="cta__info-card">
-                            <div className="cta__info-card-icon">
-                                <MessageSquare size={20} strokeWidth={1.8} />
-                            </div>
-                            <div>
-                                <h4 className="cta__info-card-title">WhatsApp</h4>
-                                <a
-                                    href={ctaContent.whatsappUrl}
-                                    className="cta__whatsapp-link"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    Enviar mensaje directo
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
+                    {/* Step content */}
+                    <div className={`cta__step cta__step--${direction}`} key={step}>
+                        <h3 className="cta__step-question">{current.question}</h3>
+                        <p className="cta__step-subtitle">{current.subtitle}</p>
 
-                        <div className="cta__exclusive">
-                            <img src="/bruce-medica-logo.png" alt="Bruce Médica" className="cta__exclusive-logo" />
-                            <p>{ctaContent.exclusiveText}</p>
+                        <div className="cta__step-body">
+                            {current.id === 'name' && (
+                                <div className="cta__input-wrap">
+                                    <User className="cta__input-icon" size={20} strokeWidth={1.8} />
+                                    <input
+                                        type="text"
+                                        className="cta__input cta__input--large"
+                                        placeholder="Dr. / Lic. Tu nombre completo"
+                                        value={form.name}
+                                        onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                                        onKeyDown={handleKeyDown}
+                                        autoFocus
+                                    />
+                                </div>
+                            )}
+
+                            {current.id === 'email' && (
+                                <div className="cta__input-wrap">
+                                    <Mail className="cta__input-icon" size={20} strokeWidth={1.8} />
+                                    <input
+                                        type="email"
+                                        className="cta__input cta__input--large"
+                                        placeholder="correo@institucion.com"
+                                        value={form.email}
+                                        onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                                        onKeyDown={handleKeyDown}
+                                        autoFocus
+                                    />
+                                </div>
+                            )}
+
+                            {current.id === 'phone' && (
+                                <div className="cta__input-wrap">
+                                    <Phone className="cta__input-icon" size={20} strokeWidth={1.8} />
+                                    <input
+                                        type="tel"
+                                        className="cta__input cta__input--large"
+                                        placeholder="+52 55 1234 5678"
+                                        value={form.phone}
+                                        onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                                        onKeyDown={handleKeyDown}
+                                        autoFocus
+                                    />
+                                </div>
+                            )}
+
+                            {current.id === 'role' && (
+                                <div className="cta__role-grid">
+                                    {ROLES.map(r => {
+                                        const Icon = r.icon;
+                                        return (
+                                            <button
+                                                key={r.value}
+                                                className={`cta__role-card ${form.role === r.value ? 'cta__role-card--active' : ''}`}
+                                                onClick={() => setForm(f => ({ ...f, role: r.value }))}
+                                            >
+                                                <Icon size={28} strokeWidth={1.5} />
+                                                <span>{r.label}</span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            )}
+
+                            {current.id === 'state' && (
+                                <div className="cta__input-wrap">
+                                    <MapPin className="cta__input-icon" size={20} strokeWidth={1.8} />
+                                    <select
+                                        className="cta__input cta__input--large cta__select"
+                                        value={form.state}
+                                        onChange={e => setForm(f => ({ ...f, state: e.target.value }))}
+                                    >
+                                        <option value="">Selecciona tu estado</option>
+                                        {STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                                    </select>
+                                </div>
+                            )}
+
+                            {current.id === 'consent' && (
+                                <div className="cta__consent-list">
+                                    <label className="cta__consent-item">
+                                        <input
+                                            type="checkbox"
+                                            checked={form.consentMarketing}
+                                            onChange={e => setForm(f => ({ ...f, consentMarketing: e.target.checked }))}
+                                            className="cta__checkbox"
+                                        />
+                                        <span>Acepto recibir otras comunicaciones de Marketing.</span>
+                                    </label>
+                                    <label className="cta__consent-item">
+                                        <input
+                                            type="checkbox"
+                                            checked={form.consentPrivacy}
+                                            onChange={e => setForm(f => ({ ...f, consentPrivacy: e.target.checked }))}
+                                            className="cta__checkbox"
+                                        />
+                                        <span>He leído y estoy de acuerdo con la <a href="#" className="cta__consent-link">Política de Privacidad</a>.</span>
+                                    </label>
+                                </div>
+                            )}
                         </div>
                     </div>
 
-                    {/* Right: Contact form */}
-                    <form className="cta__form" onSubmit={handleSubmit}>
-                        <div className="cta__form-row">
-                            <div className="cta__field">
-                                <label className="cta__label" htmlFor="contact-name">
-                                    <User size={14} strokeWidth={2} />
-                                    Nombre completo
-                                </label>
-                                <input
-                                    id="contact-name"
-                                    type="text"
-                                    name="name"
-                                    value={formState.name}
-                                    onChange={handleChange}
-                                    placeholder="Dr. / Lic. ..."
-                                    required
-                                    className="cta__input"
-                                />
-                            </div>
-                            <div className="cta__field">
-                                <label className="cta__label" htmlFor="contact-email">
-                                    <Mail size={14} strokeWidth={2} />
-                                    Correo electrónico
-                                </label>
-                                <input
-                                    id="contact-email"
-                                    type="email"
-                                    name="email"
-                                    value={formState.email}
-                                    onChange={handleChange}
-                                    placeholder="correo@institucion.com"
-                                    required
-                                    className="cta__input"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="cta__field">
-                            <label className="cta__label" htmlFor="contact-institution">
-                                <Building2 size={14} strokeWidth={2} />
-                                Institución / Clínica
-                            </label>
-                            <input
-                                id="contact-institution"
-                                type="text"
-                                name="institution"
-                                value={formState.institution}
-                                onChange={handleChange}
-                                placeholder="Hospital, clínica o centro de rehabilitación"
-                                className="cta__input"
-                            />
-                        </div>
-
-                        <div className="cta__field">
-                            <label className="cta__label" htmlFor="contact-message">
-                                <MessageSquare size={14} strokeWidth={2} />
-                                Mensaje
-                            </label>
-                            <textarea
-                                id="contact-message"
-                                name="message"
-                                value={formState.message}
-                                onChange={handleChange}
-                                placeholder="Cuéntanos sobre tu necesidad de rehabilitación..."
-                                rows={4}
-                                className="cta__input cta__textarea"
-                            />
-                        </div>
+                    {/* Navigation */}
+                    <div className="cta__nav">
+                        <button
+                            className="cta__nav-back"
+                            onClick={goBack}
+                            disabled={step === 0}
+                        >
+                            <ChevronLeft size={18} strokeWidth={2} />
+                            Atrás
+                        </button>
 
                         <button
-                            type="submit"
-                            className={`btn btn--primary btn--lg cta__submit ${submitted ? 'cta__submit--sent' : ''}`}
+                            className={`btn btn--primary btn--lg cta__nav-next ${!canAdvance() ? 'cta__nav-next--disabled' : ''}`}
+                            onClick={goNext}
+                            disabled={!canAdvance()}
                         >
-                            {submitted ? (
+                            {step === totalSteps - 1 ? (
                                 <>
-                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                        <path d="M4 9L8 13L14 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                    ¡Mensaje enviado!
+                                    <Send size={16} strokeWidth={2} />
+                                    Solicitar mi Demo
                                 </>
                             ) : (
                                 <>
-                                    <Send size={16} strokeWidth={2} />
-                                    Solicitar Demo Gratuita
+                                    Siguiente
+                                    <ChevronRight size={18} strokeWidth={2} />
                                 </>
                             )}
                         </button>
-                    </form>
+                    </div>
+
+                    {/* Quick contact */}
+                    <div className="cta__quick-contact">
+                        <span>¿Prefieres contacto directo?</span>
+                        <a href={ctaContent.whatsappUrl} target="_blank" rel="noopener noreferrer" className="cta__wa-link">
+                            WhatsApp →
+                        </a>
+                        <span className="cta__separator">·</span>
+                        {ctaContent.phones.map((p, i) => (
+                            <a key={i} href={`tel:${p.replace(/\s/g, '')}`} className="cta__phone-link">{p}</a>
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>

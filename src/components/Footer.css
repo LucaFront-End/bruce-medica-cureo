@@ -25,6 +25,12 @@
     gap: var(--space-3);
 }
 
+.footer__logo-img {
+    height: 80px;
+    width: auto;
+    object-fit: contain;
+}
+
 .footer__brand-name {
     font-family: var(--font-heading);
     font-weight: 700;

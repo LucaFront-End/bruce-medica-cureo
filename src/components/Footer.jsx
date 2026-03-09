@@ -9,11 +9,7 @@ export default function Footer() {
                 <div className="footer__inner">
                     <div className="footer__brand">
                         <div className="footer__logo">
-                            <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
-                                <rect width="28" height="28" rx="8" fill="var(--color-accent)" />
-                                <path d="M8 14L12 18L20 10" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            <span className="footer__brand-name">Bruce Médica</span>
+                            <img src="/bruce-medica-logo.png" alt="Bruce Médica" className="footer__logo-img" />
                         </div>
                         <p className="footer__brand-desc">
                             Distribuidor exclusivo de CUREO® en México. Tecnología médica para rehabilitación con realidad virtual.

@@ -1,211 +1,381 @@
-/* ─── Layout ─────────────────────────────────────────────── */
-.cta__layout {
-    display: grid;
-    grid-template-columns: 1fr 1.3fr;
-    gap: var(--space-10);
-    align-items: start;
-}
-
-/* ─── Info Panel (Left) ──────────────────────────────────── */
-.cta__info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-}
-
-.cta__info-card {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-4);
-    padding: var(--space-5);
+/* ─── Wizard Container ────────────────────────────────────── */
+.cta__wizard {
+    max-width: 640px;
+    margin-inline: auto;
     background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    transition: all var(--duration-normal) var(--ease-out);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-10);
+    box-shadow: var(--shadow-lg);
 }
 
-.cta__info-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+/* ─── Progress Bar ────────────────────────────────────────── */
+.cta__progress {
+    position: relative;
+    height: 6px;
+    background: var(--color-surface);
+    border-radius: 3px;
+    margin-bottom: var(--space-8);
+    overflow: hidden;
 }
 
-.cta__info-card-icon {
-    width: 40px;
-    height: 40px;
+.cta__progress-bar {
+    height: 100%;
+    background: var(--color-accent);
+    border-radius: 3px;
+    transition: width 0.5s var(--ease-out);
+}
+
+.cta__progress-text {
+    position: absolute;
+    right: 0;
+    top: calc(100% + var(--space-2));
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    font-weight: 600;
+}
+
+/* ─── Step Content ────────────────────────────────────────── */
+.cta__step {
+    text-align: center;
+    min-height: 220px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    border-radius: var(--radius-md);
-    background: var(--color-accent-subtle);
-    color: var(--color-accent);
-    flex-shrink: 0;
+    animation: step-in 0.35s var(--ease-out);
 }
 
-.cta__info-card-title {
-    font-size: var(--text-sm);
+.cta__step--next {
+    animation-name: step-in-next;
+}
+
+.cta__step--prev {
+    animation-name: step-in-prev;
+}
+
+@keyframes step-in-next {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes step-in-prev {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.cta__step-question {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
     font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: var(--space-2);
 }
 
-.cta__info-phone {
-    display: block;
+.cta__step-subtitle {
     font-size: var(--text-sm);
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    transition: color var(--duration-fast) var(--ease-out);
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-8);
 }
 
-.cta__info-phone:hover {
-    color: var(--color-accent);
-}
-
-.cta__whatsapp-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--color-accent);
-    text-decoration: none;
-    transition: gap var(--duration-fast) var(--ease-out);
-}
-
-.cta__whatsapp-link:hover {
-    gap: var(--space-3);
-}
-
-.cta__exclusive {
+.cta__step-body {
     display: flex;
-    align-items: center;
-    gap: var(--space-4);
-    padding: var(--space-5);
-    background: var(--color-accent-subtle);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-accent-glow);
-    margin-top: var(--space-3);
+    justify-content: center;
 }
 
-.cta__exclusive-logo {
-    height: 32px;
-    width: auto;
-    flex-shrink: 0;
-}
-
-.cta__exclusive p {
-    font-size: var(--text-xs);
-    font-weight: 600;
-    color: var(--color-accent-dark);
-    line-height: var(--leading-normal);
-}
-
-/* ─── Form (Right) ───────────────────────────────────────── */
-.cta__form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-    background: var(--color-bg-elevated);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    padding: var(--space-8);
-    box-shadow: var(--shadow-md);
-}
-
-.cta__form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-5);
-}
-
-.cta__field {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-}
-
-.cta__label {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide);
-}
-
-.cta__label svg {
-    color: var(--color-accent);
-}
-
-.cta__input {
+/* ─── Input Fields ────────────────────────────────────────── */
+.cta__input-wrap {
+    position: relative;
     width: 100%;
-    padding: var(--space-3) var(--space-4);
+    max-width: 420px;
+}
+
+.cta__input-icon {
+    position: absolute;
+    left: var(--space-4);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-accent);
+    pointer-events: none;
+}
+
+.cta__input--large {
+    width: 100%;
+    padding: var(--space-4) var(--space-4) var(--space-4) var(--space-10);
+    font-size: var(--text-lg);
     background: var(--color-surface);
-    border: 1.5px solid var(--color-border);
-    border-radius: var(--radius-md);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
     font-family: var(--font-body);
-    font-size: var(--text-sm);
     color: var(--color-text-primary);
     outline: none;
     transition: all var(--duration-fast) var(--ease-out);
 }
 
-.cta__input::placeholder {
+.cta__input--large::placeholder {
     color: var(--color-text-tertiary);
 }
 
-.cta__input:focus {
+.cta__input--large:focus {
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px var(--color-accent-glow);
+    box-shadow: 0 0 0 4px var(--color-accent-glow);
 }
 
-.cta__textarea {
-    resize: vertical;
-    min-height: 100px;
+.cta__select {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--space-4) center;
+    padding-right: var(--space-10);
 }
 
-.cta__submit {
-    align-self: flex-start;
-    display: inline-flex;
+/* ─── Role Cards ──────────────────────────────────────────── */
+.cta__role-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    width: 100%;
+    max-width: 420px;
+}
+
+.cta__role-card {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     gap: var(--space-2);
+    padding: var(--space-5) var(--space-4);
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: all var(--duration-normal) var(--ease-out);
+    transition: all var(--duration-fast) var(--ease-out);
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    font-family: var(--font-body);
 }
 
-.cta__submit--sent {
-    background: #22c55e;
+.cta__role-card:hover {
+    border-color: var(--color-accent-glow);
+    color: var(--color-text-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.cta__role-card--active {
+    border-color: var(--color-accent);
+    background: var(--color-accent-subtle);
+    color: var(--color-accent);
+    box-shadow: 0 0 0 4px var(--color-accent-glow);
+}
+
+.cta__role-card--active:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+/* ─── Consent ─────────────────────────────────────────────── */
+.cta__consent-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    max-width: 420px;
+    text-align: left;
+}
+
+.cta__consent-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-normal);
+    cursor: pointer;
+}
+
+.cta__checkbox {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--color-accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
+}
+
+.cta__consent-link {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+/* ─── Navigation ──────────────────────────────────────────── */
+.cta__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-divider);
+}
+
+.cta__nav-back {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    background: none;
+    border: none;
+    color: var(--color-text-tertiary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    transition: all var(--duration-fast) var(--ease-out);
+    font-family: var(--font-body);
+}
+
+.cta__nav-back:hover:not(:disabled) {
+    color: var(--color-text-primary);
+    background: var(--color-surface);
+}
+
+.cta__nav-back:disabled {
+    opacity: 0;
     pointer-events: none;
 }
 
-/* ─── Responsive ──────────────────────────────────────────── */
-@media (max-width: 1024px) {
-    .cta__layout {
-        grid-template-columns: 1fr;
-        gap: var(--space-8);
+.cta__nav-next {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.cta__nav-next--disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* ─── Quick Contact ───────────────────────────────────────── */
+.cta__quick-contact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    flex-wrap: wrap;
+}
+
+.cta__wa-link,
+.cta__phone-link {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.cta__wa-link:hover,
+.cta__phone-link:hover {
+    opacity: 0.7;
+}
+
+.cta__separator {
+    opacity: 0.3;
+}
+
+/* ─── Success Screen ──────────────────────────────────────── */
+.cta__success {
+    text-align: center;
+    padding: var(--space-16) 0;
+}
+
+.cta__success-icon {
+    color: var(--color-accent);
+    margin-bottom: var(--space-6);
+    animation: success-pop 0.6s var(--ease-out);
+}
+
+@keyframes success-pop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
     }
 
-    .cta__info {
-        order: 2;
+    60% {
+        transform: scale(1.2);
     }
 
-    .cta__form {
-        order: 1;
+    100% {
+        transform: scale(1);
+        opacity: 1;
     }
 }
 
-@media (max-width: 768px) {
-    .cta__form-row {
-        grid-template-columns: 1fr;
-    }
+.cta__success-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-4);
+}
 
-    .cta__form {
+.cta__success-text {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    max-width: 480px;
+    margin-inline: auto;
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-8);
+}
+
+.cta__success-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.cta__success-contact p {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+}
+
+/* ─── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .cta__wizard {
         padding: var(--space-6);
     }
 
-    .cta__submit {
-        width: 100%;
-        justify-content: center;
+    .cta__step-question {
+        font-size: var(--text-xl);
+    }
+
+    .cta__role-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .cta__input--large {
+        font-size: var(--text-base);
+    }
+
+    .cta__quick-contact {
+        flex-direction: column;
+        gap: var(--space-1);
     }
 }
