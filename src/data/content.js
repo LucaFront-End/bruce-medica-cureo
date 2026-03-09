@@ -8,7 +8,8 @@
 // ─── Media URLs from Bruce Medica / Cureosity ──────────────
 export const media = {
   video: 'https://video.wixstatic.com/video/45119e_1c5d47a8543d42aaad6485fd4fb7f4cf/480p/mp4/file.mp4',
-  heroImage: 'https://static.wixstatic.com/media/45119e_6e397ed4c2d744149b574ac3e9ce63eb~mv2.jpg',
+  heroImage: '/hero-cureo.jpg',
+  cureoLogo: 'https://cdn.prod.website-files.com/66aca0e183174aa54a79c5e2/66aca0e183174aa54a79c66c_cureo-logo.svg',
   deviceMockup: 'https://static.wixstatic.com/media/45119e_0c3886e0e6ff49bf9b8dff046fc01c91~mv2.png',
   sectionBg: 'https://static.wixstatic.com/media/45119e_5bcc34e8cfd44c2c95824f6df1bb8bd8~mv2.jpg',
   doctor: 'https://static.wixstatic.com/media/45119e_159785252b114c05891fc16012ded40e~mv2.jpg',

@@ -67,7 +67,14 @@ export default function Hero() {
                     </div>
                     {/* Floating badges */}
                     <div className="hero__float-badge hero__float-badge--1">
-                        <span>🎮</span> VR Terapia
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="1" y="7" width="22" height="10" rx="3" />
+                            <path d="M10 12h4" />
+                            <circle cx="6.5" cy="12" r="2.5" />
+                            <circle cx="17.5" cy="12" r="2.5" />
+                            <path d="M4 7V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1" />
+                        </svg>
+                        VR Terapia
                     </div>
                     <div className="hero__float-badge hero__float-badge--2">
                         <span>☁️</span> CUREO HUB

@@ -10,6 +10,7 @@ export default function WhatIsCureo() {
             <div className="container">
                 <div className="what-is__layout">
                     <div className="what-is__left reveal">
+                        <img src="/cureo-logo.png" alt="CUREO®" className="what-is__cureo-logo" />
                         <span className="tag">
                             <span className="tag__dot" />
                             {whatIsContent.tag}

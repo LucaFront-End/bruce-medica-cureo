@@ -36,6 +36,7 @@ export default function Comparison() {
                         </svg>
                     </div>
                     <div className="comparison__version comparison__version--new">
+                        <img src="/cureo-logo.png" alt="CUREO®" className="comparison__cureo-logo" />
                         <span className="comparison__version-label">Disponible ahora</span>
                         <span className="comparison__version-number">5.0</span>
                         <span className="comparison__new-badge">NUEVO</span>

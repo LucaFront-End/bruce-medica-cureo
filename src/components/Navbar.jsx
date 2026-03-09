@@ -21,16 +21,11 @@ export default function Navbar() {
         <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`} id="navbar">
             <div className="navbar__inner container--wide">
                 <a href="#" className="navbar__brand">
-                    <span className="navbar__logo-icon">
-                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                            <rect width="28" height="28" rx="8" fill="var(--color-accent)" />
-                            <path d="M8 14L12 18L20 10" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </span>
-                    <span className="navbar__brand-text">
-                        <span className="navbar__brand-name">{navContent.brand}</span>
-                        <span className="navbar__brand-sub">Tecnología Médica</span>
-                    </span>
+                    <img
+                        src="/bruce-medica-logo.png"
+                        alt="Bruce Médica"
+                        className="navbar__logo-img"
+                    />
                 </a>
 
                 <ul className={`navbar__links ${mobileOpen ? 'navbar__links--open' : ''}`}>

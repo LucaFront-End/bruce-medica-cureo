@@ -1,70 +1,168 @@
+import { useState } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { ctaContent } from '../data/content';
+import { Send, User, Mail, Building2, MessageSquare, Phone } from 'lucide-react';
 import './CTA.css';
 
 export default function CTA() {
     const ref = useScrollReveal();
+    const [formState, setFormState] = useState({ name: '', email: '', institution: '', message: '' });
+    const [submitted, setSubmitted] = useState(false);
+
+    const handleChange = (e) => {
+        setFormState(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // In production, this would POST to an API
+        setSubmitted(true);
+        setTimeout(() => setSubmitted(false), 4000);
+    };
 
     return (
         <section className="cta section" id="contacto" ref={ref}>
             <div className="container">
-                <div className="cta__card reveal">
-                    {/* Decorative background */}
-                    <div className="cta__bg">
-                        <div className="cta__bg-orb cta__bg-orb--1" />
-                        <div className="cta__bg-orb cta__bg-orb--2" />
-                        <div className="cta__bg-grid" />
-                    </div>
+                <div className="section-header reveal">
+                    <span className="tag section-header__tag">
+                        <span className="tag__dot" />
+                        Contacto
+                    </span>
+                    <h2 className="section-header__title">{ctaContent.title}</h2>
+                    <p className="section-header__subtitle">{ctaContent.subtitle}</p>
+                </div>
 
-                    <div className="cta__content">
-                        <span className="cta__eyebrow">Comienza hoy</span>
-                        <h2 className="cta__title">{ctaContent.title}</h2>
-                        <p className="cta__subtitle">{ctaContent.subtitle}</p>
-
-                        <div className="cta__actions">
-                            <a
-                                href="https://www.brucemedica.com.mx"
-                                className="btn btn--primary btn--lg cta__btn-glow"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {ctaContent.ctaPrimary}
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                    <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                            </a>
-                            <a
-                                href={ctaContent.whatsappUrl}
-                                className="btn btn--secondary btn--lg cta__whatsapp"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                                </svg>
-                                {ctaContent.ctaSecondary}
-                            </a>
-                        </div>
-
-                        <div className="cta__contact">
-                            <div className="cta__phones">
+                <div className="cta__layout reveal reveal-delay-1">
+                    {/* Left: Contact info */}
+                    <div className="cta__info">
+                        <div className="cta__info-card">
+                            <div className="cta__info-card-icon">
+                                <Phone size={20} strokeWidth={1.8} />
+                            </div>
+                            <div>
+                                <h4 className="cta__info-card-title">Teléfonos</h4>
                                 {ctaContent.phones.map((phone, i) => (
-                                    <a key={i} href={`tel:${phone.replace(/\s/g, '')}`} className="cta__phone">
-                                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                            <circle cx="8" cy="8" r="7" stroke="var(--color-accent)" strokeWidth="1.5" />
-                                            <path d="M5.5 6.5L8 9L10.5 6.5" stroke="var(--color-accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
+                                    <a key={i} href={`tel:${phone.replace(/\s/g, '')}`} className="cta__info-phone">
                                         {phone}
                                     </a>
                                 ))}
                             </div>
-                            <div className="cta__exclusive-wrap">
-                                <div className="cta__exclusive-line" />
-                                <p className="cta__exclusive">{ctaContent.exclusiveText}</p>
-                                <div className="cta__exclusive-line" />
+                        </div>
+
+                        <div className="cta__info-card">
+                            <div className="cta__info-card-icon">
+                                <MessageSquare size={20} strokeWidth={1.8} />
+                            </div>
+                            <div>
+                                <h4 className="cta__info-card-title">WhatsApp</h4>
+                                <a
+                                    href={ctaContent.whatsappUrl}
+                                    className="cta__whatsapp-link"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Enviar mensaje directo
+                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </a>
                             </div>
                         </div>
+
+                        <div className="cta__exclusive">
+                            <img src="/bruce-medica-logo.png" alt="Bruce Médica" className="cta__exclusive-logo" />
+                            <p>{ctaContent.exclusiveText}</p>
+                        </div>
                     </div>
+
+                    {/* Right: Contact form */}
+                    <form className="cta__form" onSubmit={handleSubmit}>
+                        <div className="cta__form-row">
+                            <div className="cta__field">
+                                <label className="cta__label" htmlFor="contact-name">
+                                    <User size={14} strokeWidth={2} />
+                                    Nombre completo
+                                </label>
+                                <input
+                                    id="contact-name"
+                                    type="text"
+                                    name="name"
+                                    value={formState.name}
+                                    onChange={handleChange}
+                                    placeholder="Dr. / Lic. ..."
+                                    required
+                                    className="cta__input"
+                                />
+                            </div>
+                            <div className="cta__field">
+                                <label className="cta__label" htmlFor="contact-email">
+                                    <Mail size={14} strokeWidth={2} />
+                                    Correo electrónico
+                                </label>
+                                <input
+                                    id="contact-email"
+                                    type="email"
+                                    name="email"
+                                    value={formState.email}
+                                    onChange={handleChange}
+                                    placeholder="correo@institucion.com"
+                                    required
+                                    className="cta__input"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="cta__field">
+                            <label className="cta__label" htmlFor="contact-institution">
+                                <Building2 size={14} strokeWidth={2} />
+                                Institución / Clínica
+                            </label>
+                            <input
+                                id="contact-institution"
+                                type="text"
+                                name="institution"
+                                value={formState.institution}
+                                onChange={handleChange}
+                                placeholder="Hospital, clínica o centro de rehabilitación"
+                                className="cta__input"
+                            />
+                        </div>
+
+                        <div className="cta__field">
+                            <label className="cta__label" htmlFor="contact-message">
+                                <MessageSquare size={14} strokeWidth={2} />
+                                Mensaje
+                            </label>
+                            <textarea
+                                id="contact-message"
+                                name="message"
+                                value={formState.message}
+                                onChange={handleChange}
+                                placeholder="Cuéntanos sobre tu necesidad de rehabilitación..."
+                                rows={4}
+                                className="cta__input cta__textarea"
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className={`btn btn--primary btn--lg cta__submit ${submitted ? 'cta__submit--sent' : ''}`}
+                        >
+                            {submitted ? (
+                                <>
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                        <path d="M4 9L8 13L14 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                    ¡Mensaje enviado!
+                                </>
+                            ) : (
+                                <>
+                                    <Send size={16} strokeWidth={2} />
+                                    Solicitar Demo Gratuita
+                                </>
+                            )}
+                        </button>
+                    </form>
                 </div>
             </div>
         </section>

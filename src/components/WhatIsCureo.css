@@ -4,6 +4,16 @@
     overflow: hidden;
 }
 
+.what-is__cureo-logo {
+    max-height: 50px;
+    max-width: 200px;
+    width: auto;
+    height: auto;
+    margin-bottom: var(--space-4);
+    display: block;
+    object-fit: contain;
+}
+
 .what-is::before {
     content: '';
     position: absolute;
